@@ -3,6 +3,7 @@
 import os
 
 from flask import Flask, jsonify, render_template, request
+from werkzeug.exceptions import BadRequest
 
 
 def create_app(test_config=None):
@@ -30,6 +31,13 @@ def create_app(test_config=None):
         if request.path.startswith("/api/"):
             return jsonify(error="Recurso no encontrado"), 404
         return render_template("404.html"), 404
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        if request.path.startswith("/api/"):
+            message = error.description if isinstance(error, BadRequest) else "Solicitud no válida"
+            return jsonify(error=message), 400
+        return render_template("400.html"), 400
 
     @app.errorhandler(500)
     def internal_error(_error):
