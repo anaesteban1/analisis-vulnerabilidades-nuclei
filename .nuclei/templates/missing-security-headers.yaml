@@ -1,0 +1,19 @@
+id: estadosseguro-missing-security-headers
+
+info:
+  name: EstadoSeguro missing baseline security headers
+  author: estadosseguro
+  severity: low
+  description: Checks for missing baseline browser security headers on the local homepage.
+  reference:
+    - https://owasp.org/www-project-secure-headers/
+  tags: estadosseguro,misconfig,headers
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/"
+    matchers:
+      - type: dsl
+        dsl:
+          - 'status_code == 200 && (!contains(tolower(all_headers), "content-security-policy") || !contains(tolower(all_headers), "x-content-type-options") || !contains(tolower(all_headers), "x-frame-options"))'

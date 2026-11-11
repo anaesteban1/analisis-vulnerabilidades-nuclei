@@ -1,0 +1,17 @@
+id: estadosseguro-healthcheck
+
+info:
+  name: EstadoSeguro health endpoint responds
+  author: estadosseguro
+  severity: info
+  description: Confirms the local demo application health endpoint is reachable.
+  tags: estadosseguro,health,smoke
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/health"
+    matchers:
+      - type: dsl
+        dsl:
+          - 'status_code == 200 && contains(body, "\"status\":\"ok\"")'

@@ -1,0 +1,73 @@
+name: Pruebas y análisis de seguridad
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality-and-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v4
+
+      - name: Preparar Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: python -m pip install -r requirements.txt
+
+      - name: Ejecutar pruebas
+        run: python -m pytest -q
+
+      - name: Preparar directorio de resultados
+        run: mkdir -p artifacts && : > artifacts/nuclei.jsonl
+
+      - name: Iniciar aplicación exclusivamente en localhost
+        run: |
+          python -m flask --app app run --host 127.0.0.1 --port 5000 > artifacts/app.log 2>&1 &
+          echo $! > artifacts/app.pid
+
+      - name: Esperar respuesta de /health
+        run: |
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:5000/health; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat artifacts/app.log
+          exit 1
+
+      - name: Analizar localhost con Nuclei
+        uses: projectdiscovery/nuclei-action@v3
+        with:
+          args: >-
+            -u http://127.0.0.1:5000
+            -t .nuclei/templates
+            -rl 2
+            -c 1
+            -timeout 5
+            -retries 0
+            -no-interactsh
+            -disable-update-check
+            -jsonl
+            -o artifacts/nuclei.jsonl
+
+      - name: Guardar resultados de seguridad
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultados-nuclei
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 14
