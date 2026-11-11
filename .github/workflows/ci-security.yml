@@ -30,7 +30,9 @@ jobs:
         run: python -m pytest -q
 
       - name: Preparar directorio de resultados
-        run: mkdir -p artifacts && : > artifacts/nuclei.jsonl
+        run: |
+          mkdir -p artifacts
+          : > artifacts/nuclei.jsonl
 
       - name: Iniciar aplicación exclusivamente en localhost
         run: |
