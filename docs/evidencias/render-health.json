@@ -1,0 +1,20 @@
+{
+  "base_url": "https://estadosseguro.onrender.com",
+  "observed_at": "2026-11-11T17:10:50.3778361-05:00",
+  "homepage_status_code": 200,
+  "health_url": "https://estadosseguro.onrender.com/health",
+  "health_status_code": 200,
+  "health_response_body": {
+    "servicio": "EstadoSeguro",
+    "status": "ok"
+  },
+  "health_content_type": [
+    "application/json"
+  ],
+  "x_content_type_options": [
+    "nosniff"
+  ],
+  "x_frame_options": [
+    "DENY"
+  ]
+}
