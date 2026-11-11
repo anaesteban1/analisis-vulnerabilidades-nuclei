@@ -9,7 +9,7 @@
 - Pytest
 - Gunicorn
 - GitHub Actions
-- ProjectDiscovery Nuclei (`projectdiscovery/nuclei-action@v3`)
+- ProjectDiscovery Nuclei (`projectdiscovery/nuclei-action@v3`), listado en el [catálogo comunitario de herramientas de escaneo de vulnerabilidades de OWASP](https://community.owasp.org/Vulnerability_Scanning_Tools). La inclusión en la lista no implica aval de OWASP.
 - Render Blueprints
 
 ## Funcionalidades
