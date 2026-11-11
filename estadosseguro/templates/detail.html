@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}{{ incident.title }} · EstadoSeguro{% endblock %}
+{% block content %}
+<nav class="breadcrumbs"><a href="{{ url_for('main.index') }}">← Volver a incidencias</a></nav>
+<article class="detail-card"><p class="eyebrow">INCIDENCIA #{{ incident.id }} · {{ incident.service|upper }}</p><h1>{{ incident.title }}</h1><div class="detail-badges"><span class="badge status-{{ incident.status_key }}">{{ incident.status }}</span><span class="severity severity-{{ incident.severity|lower }}">Severidad {{ incident.severity|lower }}</span></div><p class="detail-description">{{ incident.description }}</p><dl class="detail-facts"><div><dt>Responsable</dt><dd>{{ incident.owner }}</dd></div><div><dt>Última actualización</dt><dd>{{ incident.updated }}</dd></div></dl></article>
+{% endblock %}

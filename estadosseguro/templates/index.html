@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Estado de servicios · EstadoSeguro{% endblock %}
+{% block content %}
+<section class="hero">
+  <div><p class="eyebrow">ESTADO DEL SISTEMA</p><h1>Todo bajo seguimiento.</h1><p class="intro">Consulta el estado actual de nuestros servicios y las incidencias en curso.</p></div>
+  <div class="overall"><span class="pulse"></span><span>Operación monitoreada</span></div>
+</section>
+<section class="service-section" aria-labelledby="services-title">
+  <div class="section-heading"><div><p class="eyebrow">PLATAFORMA</p><h2 id="services-title">Servicios</h2></div><span class="muted">{{ services|length }} servicios</span></div>
+  <div class="service-grid">{% for service in services %}<article class="service-card"><span class="service-dot"></span><div><strong>{{ service }}</strong><small>Monitoreo activo</small></div><span class="service-state">Operativo</span></article>{% endfor %}</div>
+</section>
+<section class="incident-section" aria-labelledby="incidents-title">
+  <div class="section-heading"><div><p class="eyebrow">SEGUIMIENTO</p><h2 id="incidents-title">Incidencias</h2></div><span class="muted">{{ incidents|length }} resultados</span></div>
+  <form class="filters" method="get" action="{{ url_for('main.index') }}">
+    <label class="search-label" for="q">Buscar</label><input id="q" name="q" type="search" maxlength="100" value="{{ query }}" placeholder="Servicio o descripción">
+    <label class="status-label" for="estado">Estado</label><select id="estado" name="estado"><option value="">Todos los estados</option><option value="abierta" {% if status == 'abierta' %}selected{% endif %}>Abierta</option><option value="en-progreso" {% if status == 'en-progreso' %}selected{% endif %}>En progreso</option><option value="resuelta" {% if status == 'resuelta' %}selected{% endif %}>Resuelta</option></select>
+    <button type="submit">Filtrar</button><a class="reset-link" href="{{ url_for('main.index') }}">Limpiar</a>
+  </form>
+  <div class="incident-list">{% for incident in incidents %}<article class="incident-card">
+    <div class="incident-main"><div class="incident-title-row"><a href="{{ url_for('main.incident_detail', incident_id=incident.id) }}">{{ incident.title }}</a><span class="badge status-{{ incident.status_key }}">{{ incident.status }}</span></div><p>{{ incident.summary }}</p><div class="incident-meta"><span>{{ incident.service }}</span><span>·</span><span>{{ incident.updated }}</span></div></div>
+    <span class="severity severity-{{ incident.severity|lower }}">{{ incident.severity }}</span><a class="arrow" aria-label="Ver {{ incident.title }}" href="{{ url_for('main.incident_detail', incident_id=incident.id) }}">↗</a>
+  </article>{% else %}<div class="empty"><strong>No hay incidencias para estos filtros.</strong><span>Prueba con otra búsqueda o limpia los filtros.</span></div>{% endfor %}</div>
+</section>
+{% endblock %}

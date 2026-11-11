@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Panel de estado e incidencias de servicios">
+  <title>{% block title %}EstadoSeguro{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('main.index') }}"><span class="brand-mark">ES</span><span>Estado<span class="brand-light">Seguro</span></span></a>
+    <span class="topbar-label">CENTRO DE ESTADO</span>
+  </header>
+  <main class="container">{% block content %}{% endblock %}</main>
+  <footer class="footer"><span>EstadoSeguro · Información de demostración</span><a href="{{ url_for('main.api_incidents') }}">API de incidencias</a></footer>
+</body>
+</html>
